@@ -13,10 +13,12 @@ async function init() {
   const app = express();
 
   app.get("/get", async (req, res) => {
+    console.log(req.query);
+
     const db = await client.db("adoption");
     const collection = db.collection("pets");
 
-    const pets = collection
+    const pets = await collection
       .find(
         {
           $text: { $search: req.query.search },
@@ -30,7 +32,7 @@ async function init() {
     res.json({ status: "ok", pets }).end();
   });
 
-  const PORT = 3000;
+  const PORT = process.env.PORT || 3000;
   app.use(express.static("./static"));
   app.listen(PORT);
   console.log(`running on http://localhost:${PORT}`);
