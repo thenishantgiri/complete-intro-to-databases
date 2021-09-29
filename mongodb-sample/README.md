@@ -1,33 +1,48 @@
-#MongoDB Setup
+# MongoDB Setup
 
-###Test Setup
-<br>
+## Test Setup
 
 Creating Docker Env (with MongoDB):
-`sudo docker run --name test-mongo -dit -p 27017:27017 --rm mongo`
+```
+sudo docker run --name test-mongo -dit -p 27017:27017 --rm mongo
+```
 
 To list docker images running:
-`sudo docker ps`
+```
+sudo docker ps
+```
 
 To run the docker image:
-`sudo docker exec -it test-mongo mongo`
+```
+sudo docker exec -it test-mongo mongo
+```
 
-##MongoDB commands
+## MongoDB commands
 
 To list the all the databases:
-`show dbs;`
+```
+show dbs;
+```
 
 To create a database:
-`use <database name>;`
+```
+use <database name>;
+```
 i.e.
-`use adoption;`
+```
+use adoption;
+```
 
 To show the current working database:
-`db;`
+```
+db;
+```
 
 To create a collection:
 (the following query will create `pets` collection on the fly)
-`db.pets.createOne({name: "Luna", type: "dog", breed: "Havanese", age: 8});`
+```
+db.pets.createOne({name: "Luna", type: "dog", breed: "Havanese", age: 8});
+```
 
 To insert many data in our database: (use `insertMany()`)
 ```db.pets.insertMany(
@@ -66,18 +81,20 @@ db.pets.find({ type: "dog" }, { name: 1, breed: 1, _id: 0 });
 db.pets.find({ type: "dog" }, { name: true, breed: true, _id: false }); // note that true and false work too
 ```
 
-###Updates
-####updateOne
+### Updates
+#### updateOne
 ```
 db.pets.updateOne(
   { type: "dog", name: "Luna", breed: "Havanese" },
   { $set: { owner: "Peter" } }
 );
 ```
-####updateMany
-`db.pets.updateMany({ type: "dog" }, { $inc: { age: 1 } });`
+#### updateMany
+```
+db.pets.updateMany({ type: "dog" }, { $inc: { age: 1 } });
+```
 
-###Upsert (update and insert)
+### Upsert (update and insert)
 ```
 db.pets.updateOne(
   {
@@ -101,26 +118,34 @@ db.pets.updateOne(
 );
 ```
 
-###Delete
+### Delete
 `db.pets.deleteMany({ type: "reptile", breed: "Havanese" })`
 
-###Indexes in MongoDB
+### Indexes in MongoDB
 
 To get the indexes:
-`db.pets.getIndexes();`
+```
+db.pets.getIndexes();
+```
 
-###Create Index:
-`db.pets.createIndex({ name: true });`
+### Create Index:
+```
+db.pets.createIndex({ name: true });
+```
 
-###Create Unique Index:
-`db.pets.createIndex({ index: 1 }, { unique: true });`
+### Create Unique Index:
+```
+db.pets.createIndex({ index: 1 }, { unique: true });
+```
 
 To check execution status
-`db.pets.find({ name: "Fido" }).explain("executionStats");`
+```
+db.pets.find({ name: "Fido" }).explain("executionStats");
+```
 
-###Text Index
+### Text Index
 
-####Creating Text Index
+#### Creating Text Index
 ```
 db.pets.createIndex({
   type: "text",
@@ -128,14 +153,14 @@ db.pets.createIndex({
   name: "text",
 });
 ```
-###Text Index Search
+### Text Index Search
 ```
 db.pets
   .find({ $text: { $search: "dog Havanese Luna" } })
   .sort({ score: { $meta: "textScore" } });
 ```
 
-###Text Index Searching and Sorting
+### Text Index Searching and Sorting
 ```
 db.pets
   .find(
@@ -152,7 +177,7 @@ db.pets
   .sort({ score: { $meta: "textScore" } });
 ```
 
-##Aggregation
+## Aggregation
 
 If we wanted to know how many puppies, adult, and senior dogs we have in our pets collection? Let's try just that
 ```
